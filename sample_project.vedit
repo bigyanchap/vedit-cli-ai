@@ -1,0 +1,13 @@
+{
+    "project_name": "Sample Video Project",
+    "created_date": "2024-01-01T12:00:00",
+    "clips_count": 2,
+    "audio_count": 1,
+    "photos_count": 1,
+    "overlays_count": 1,
+    "text_overlays_count": 1,
+    "audio_overdubs_count": 0,
+    "transition_type": "dissolve",
+    "output_path": "C:\\VideoProjects",
+    "description": "Sample project demonstrating VEdit CLI features"
+} 
