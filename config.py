@@ -10,12 +10,13 @@ UI_CONFIG = {
     # Color scheme
     'background_color': '#2B2B2B',      # Eclipse Gray
     'foreground_color': 'white',
-    'command_color': 'green',
+    'command_color': '#00FFFF',          # Cyan (bright blue)
     'command_executed_color': '#00FF00', # Bright green
     'error_color': 'red',
     'warning_color': 'yellow',
     'success_color': 'green',
     'info_color': 'cyan',
+    'tip_color': 'orange',
     
     # Window settings
     'window_width': 1200,

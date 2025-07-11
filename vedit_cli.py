@@ -38,7 +38,7 @@ class VideoEditorCLI:
         # Set Eclipse Gray background
         self.root.configure(bg="#2B2B2B")
         ctk.set_appearance_mode("dark")
-        ctk.set_default_color_theme("dark-blue")
+        # ctk.set_default_color_theme("dark-blue")  # Comment out theme to prevent override
         
         # Main frame
         main_frame = ctk.CTkFrame(self.root, fg_color="#2B2B2B")
@@ -115,7 +115,7 @@ class VideoEditorCLI:
         
         self.suggestions_label = ctk.CTkLabel(self.suggestions_frame, 
                                              text="💡 Tip: Type 'help' for available commands", 
-                                             font=("Consolas", 11), text_color="#888888")
+                                             font=("Consolas", 11), text_color="orange")
         self.suggestions_label.pack(expand=True)
         
         # Command input frame
@@ -129,12 +129,20 @@ class VideoEditorCLI:
         
         # Command entry
         self.command_entry = ctk.CTkEntry(input_frame, font=("Consolas", 14), 
-                                         fg_color="#1E1E1E", text_color="green",
+                                         fg_color="#1E1E1E", text_color="yellow",
                                          border_color="green", height=35)
         self.command_entry.pack(side="left", fill="x", expand=True, padx=(0, 10))
         self.command_entry.bind("<Return>", self.execute_command)
         self.command_entry.bind("<KeyRelease>", self.on_key_release)
         self.command_entry.focus()
+        
+        # Debug: Print initial color
+        initial_color = self.command_entry.cget("text_color")
+        print(f"Initial command entry color: {initial_color}")
+        
+        # Force update the widget
+        self.command_entry.update()
+        print(f"After update - command entry color: {self.command_entry.cget('text_color')}")
         
         # Status bar
         self.status_label = ctk.CTkLabel(main_frame, text="Ready", 
@@ -165,6 +173,12 @@ class VideoEditorCLI:
         
         # Start suggestion animation
         self.animate_suggestions()
+        
+        # Force set the command entry color after initialization
+        self.root.after(100, lambda: self.command_entry.configure(text_color="yellow"))
+        self.root.after(100, lambda: print(f"Delayed color set: {self.command_entry.cget('text_color')}"))
+        self.root.after(200, lambda: self.command_entry.configure(text_color="yellow"))
+        self.root.after(200, lambda: print(f"Second delayed color set: {self.command_entry.cget('text_color')}"))
         
         # Welcome message
         self.log("VEdit CLI - Video Editor v1.0")
@@ -200,8 +214,8 @@ class VideoEditorCLI:
             # Schedule next animation
             self.root.after(4000, self.animate_suggestions)  # 4 seconds visible
         else:
-            # Use predefined color steps
-            colors = ["#000000", "#111111", "#222222", "#333333", "#444444", "#555555", "#666666", "#777777", "#888888"]
+            # Use predefined color steps (orange fade)
+            colors = ["#000000", "#1a0d00", "#331a00", "#4d2600", "#663300", "#804000", "#994d00", "#b35900", "#cc6600"]
             self.suggestions_label.configure(text_color=colors[self.fade_step])
             self.fade_step += 1
             self.root.after(150, self.fade_in_suggestion)  # 150ms intervals
@@ -217,14 +231,21 @@ class VideoEditorCLI:
             # Schedule next animation
             self.root.after(2000, self.animate_suggestions)  # 2 seconds hidden
         else:
-            # Use predefined color steps
-            colors = ["#000000", "#111111", "#222222", "#333333", "#444444", "#555555", "#666666", "#777777", "#888888"]
+            # Use predefined color steps (orange fade)
+            colors = ["#000000", "#1a0d00", "#331a00", "#4d2600", "#663300", "#804000", "#994d00", "#b35900", "#cc6600"]
             self.suggestions_label.configure(text_color=colors[self.fade_step])
             self.fade_step -= 1
             self.root.after(150, self.fade_out_suggestion)  # 150ms intervals
             
     def on_key_release(self, event=None):
         """Handle key release events for real-time feedback"""
+        # Change text color to bright blue when typing
+        self.command_entry.configure(text_color="yellow")
+        
+        # Debug: Print current color
+        current_color = self.command_entry.cget("text_color")
+        print(f"Key release - Current color: {current_color}")
+        
         # Update project info when typing
         self.update_project_info()
         
@@ -275,7 +296,9 @@ class VideoEditorCLI:
             
         # Change command color to bright green when executed
         self.command_entry.configure(text_color="#00FF00")
-        self.root.after(100, lambda: self.command_entry.configure(text_color="green"))
+        print(f"Command executed - Color changed to green")
+        self.root.after(100, lambda: self.command_entry.configure(text_color="yellow"))
+        self.root.after(150, lambda: print(f"Command executed - Color reset to yellow"))
         
         self.log(f"vedit> {command}", "green")
         self.command_entry.delete(0, "end")
